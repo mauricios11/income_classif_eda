@@ -1,16 +1,18 @@
 # 💸 Predicción de Ingresos Anuales a partir de Datos demográficos 💸
 
-## 📝 Descripción del proyecto
+## 📝 Descripción
 Este proyecto se centra en la predicción de ingresos anuales usando un dataset del *Census Bureau* de los EEUU. Contiene información demográfica y económica de más de $45,000$ sujetos. El objetivo principal es predecir si una persona tiene un ingreso mayor a $USD $50$ k al año basado en sus características personales y laborales.
 * *(bitácora al final del README)*
+
+* **objetivos**: A parte de entrenar un `RandomForest` como modelo final para realizar predicciones, el principal objetivo del proyecto es evitar tomar decisiones arbitrarias. A lo largo del análisis, nos enfocamos en justificar cada elección mediante evaluaciones estadísticas
 
 incluye las siguientes variables:
 (*"$n$ tipos distintos"* $\rightarrow$ equivale al número de elementos/categorías diferentes que hay en cada columna **categórica**): 
 * **(1) age**: edad del sujeto
 * **(2) workclass**: Tipo de trabajo / sector al que pertenece el individuo *(gobierno, privado, sin empleo, etc.)*. $9$ tipos distintos
 * **(3) fnlwgt**: Peso final del individup en la encuesta (descripción de esta variable más abajo) 
-* **(4) education_num**: Nivel educativo del individuo *(en formato numérico)* correspondiente a los años de educación completados
-* **(5) marital_status**: Estado civil del individuo *(soltero, casado)*
+* **(4) education_num**: Nivel educativo del individuo *(formato numérico)* correspondiente a los años de educación completados
+* **(5) marital_status**: Estado civil del individuo *(soltero, casado, etc.)*
 * **(6) occupation**: A qué se dedica *(ejecutivo, obrero, empleado de gobierno, etc)*. $15$ tipos distintos
 * **(7) relationship**: Rol **familiar** que el individuo asume dentro del hogar *(jefe de hogar, esposo/a)*. $6$ tipos distintos
 * **(8) ethnicity**: Etnia del individuo *(Blanco, negro, asiático)*. $5$ tipos distintos
@@ -29,9 +31,9 @@ El modelo de clasificación entrenado durante este proyecto ha sido desplegado e
 * El repositorio del deployment está en el siguiente enlace: "[Random Forest Deployment](https://github.com/mauricios11/random_forest_deployment)"
 
 ### 📚 Aclaración de entornos implementados
-Durante el análisis exploratorio hemos trabajado con dos entornos distintos. La razón de esto es porque la librería encargada de hacer el balanceo de datos necesita un versión específica de *sklearn*, una versión anterior cuya compatibilidad con *seaborn* y otras librerías da algunos problemas.
-* teóricamente, la diferencia principal entre ambos entornos es que el que está hecho para datos desbalanceados usa `scikit-learn==1.2.2` + `imblearn`
-* en adición, se hizo un downgrade en el entorno *eda* a `scikit-learn==1.5.2` por un festival de warnings que salían al usar `xgboost`
+Trabajamos con dos entornos distintos debido a problemas de compatibilidad entre versiones:.
+* **Entorno 1 (EDA)**: Downgrade a`scikit-learn==1.5.2` para evitar advertencias al usar `xgboost`.
+* **Entorno 2 (Imbalanced)**: Downgrade a `scikit-learn==1.2.2` para usar `imblearn` durante el balanceo de datos.
 
 ### ℹ️ instalación del proyecto:
 ✂️ En un nuevo directorio para el proyecto, ejecuta el siguiente comando:
@@ -42,9 +44,11 @@ git clone https://github.com/mauricios11/income_classif_eda.git
 ```
 #anaconda
 conda env create -f eda_environment.yml
+conda activate eda
 
 #pip
-pip install --upgrade pip
+python -m venv eda
+source eda/bin/activate  # Windows: eda\Scripts\activate
 pip install -r eda_requirements.txt
 
 ```
@@ -52,10 +56,13 @@ pip install -r eda_requirements.txt
 ```
 #anaconda (instalar imblearn con pip)
 conda env create -f imbalanced_environment.yml
+conda activate imbalanced
+pip install imblearn
 pip install imblearn
 
 #pip
-pip install --upgrade pip
+python -m venv imbalanced
+source imbalanced/bin/activate  # Windows: imbalanced\Scripts\activate
 pip install -r imbalanced_requirements.txt
 ```
 Si tienen algún problema con la instalación de librerías $\rightarrow$ just hit me up :D *(recomiendo usar anaconda)*
@@ -97,56 +104,47 @@ Si tienen algún problema con la instalación de librerías $\rightarrow$ just h
 ```
 
 ### 📰 Bitácora de procesos
+#### 🕵️‍♀️ Exploración de Datos (EDA)
+Iniciamos estudiando el comportamiento general de las variables. No se encontraron relaciones lineales significativas, lo que llevó a investigar posibles relaciones no lineales.
 
-se comenzó con un EDA, analizando el comportamiento de las variables en general, sin encontrar muchas columnas relación lineal significativa (posteriormente se hizo un análisis para encontrar relaciones no lineales)
+* **Manejo de valores nulos**: Se detectaron nulos implícitos como 'unknown'. Columnas con prefijos como "_other" no fueron modificadas, ya que representaban casos reales pero poco comunes.
 
-se detectaron valores nulos implícitos como 'unknnown', en adición se ancontró otro tipo de columnas con prefijo "_other" las cuales se decidió no tocar dado que se trataba de registros reales pero poco comunes (por eso no figuraban como categoría con un nombre específico)
+* **Imputación de valores**: Se probaron dos métodos de imputación: por moda y un `DecisionTreeClassifier`, siendo este último el de mejor desempeño.
 
-imputación por la moda e imputación por medio de un DecisionTreeClassifier (el segundo con mejor desempeño)
-balanceo por SMOTE (oversampling a minoritarias) y se encontró el mejor punto para tener la cantidad de muestras tal que diera el mejor f1-score. después se hizo un  balanceo por subsets (oversampling a minoritarias + undersampling con RandomForestClassifier)
-el smote termino siendo ligeramente mejor
+* **Balanceo de datos**: Se utilizaron dos técnicas `SMOTE` *(oversampling)* y una combinación de oversampling + undersampling con un RandomForestClassifier. SMOTE resultó ligeramente superior. 
+    * Ajustamos la cantidad de muestras balanceadas para maximizar el f1-score.
 
-continuamos con la selección de las columnas más importantes mediante feature importances y mutual information
+* 🔍 **Selección de variables**: Identificamos las columnas más importantes usando:
+    * `Feature Importances` + `RandomForest`.
+    * `Mutual Information` *(análisis de dependencia)*.
+    * En adición, evaluamos el uso de `PCA` para reducir dimensionalidad, pero los resultados fueron inferiores, ya que la mayoría de las variables eran categóricas.
 
-comparamos el desempeño con un PCA, pero resultó ser menor (tiene sentido porque no hay muchas columnas, y las que hay en su mayoría son categóritas)
-    <p>Durante el análisis exploratorio en pasos anteriores encontramos que una de las variables más importantes en el análisis inicial fue <i>fnlwgt</i>. Sin embargo, al planear el despliegue del modelo surgió una preocupación:</p> 
-    <ul>
-        <li>El usuario no tendría acceso a esta cifra <i>(fnlwgt)</i> sin los datos y procesos específicos del dataset original. Por esta razón, aceptamos el reto de crear un modelo capaz de predecir este valor, dada su importancia en el desempeño del modelo principal.</li>
-    </ul>
-    <p><b>Estrategia</b>:</p>
-    <ul>
-        <li>Se exploraron varios algoritmos: <i>Random Forest Regressor, XGBoost, LightGBM, SVR</i> junto con una estrategia de Modelos de ensamble<i>(stacking)</i> combinando varios de los anteriores.</li>
-    </ul>
-    <p>Todos estos métodos fueron optimizados mediante la búsqueda de hiperparámetros (GridSearchCV) y ajustes adicionales como:</p>
-    <ul>
-        <li>PCA para reducción de dimensionalidad.
-        <li>Incorporación de variables derivadas como <code>capital_net</code> <i>(basado en capital_gain y capital_loss).</i></li>
-        <li>Variantes con distintos conjuntos de columnas consideradas importantes.</li>
-    </ul>
-    <p>A pesar de las múltiples iteraciones con distintos métodos, los resultados en todos los casos tuvieron un desmempeño poco aceptable</p>
-    <ul>
-        <li>La métricas: <b>R², MAE y RMSE</b> (haciendo incapié en la primera) reflejaron un modelo incapaz de generalizar la complejidad de <i>fnlwgt</i></li>
-    </ul>
-<b>reflexión</b>: A pesar de haber tenido indicios de que esta variable podría ser problemática desde el principio del análisis exploratorio, ignoramos tal evidencia y continuamos con el análisis, aceptando el reto de enfrentarse a predecir esta variable.
+### ❌ Dificultades con fnlwgt
+Durante el EDA, fnlwgt destacó como una variable importante. Sin embargo, detectamos que en un contexto práctico, los usuarios no tendrían acceso a este valor.
 
-* Esta es una prueba sobre la importancia sobre evitar ignorar indicios que los datos nos dan al princpio del EDA, y que no todos los valores importantes en un análisis inicial son predicibles en un contexto práctico. fnlwgt, aunque relevante para predecir income, no fue posible de modelar con la precisión deseada <>(incluso tras extensos ajustes)
-* A veces es más eficiente reevaluar y rediseñar estrategias en lugar de insistir en una solución que no es factible en el contexto práctico.
+* **Estrategia fallida**: Intentamos predecir fnlwgt usando modelos como: *Random Forest, XGBoost, LightGBM, SVR* y un *ensemble stacking*.
+    * A pesar de optimizar hiperparámetros y agregar variables derivadas (como `capital_net`), los resultados fueron insatisfactorios:
+    * Métricas como R², MAE y RMSE reflejaron un modelo incapaz de generalizar.
 
- <b style="font-size: 1.5em;">💭 Nueva estrategia</b>
-    <p>Se descarta <code>fnlwgt</code>como variable en el modelo final que busca predecir <code>income</code>. Para compensar su ausencia, se agregarán más columnas presentes en las <b>feature importances</b> | <b>mutual information</b></p>
-    <br>
-    <p>Para contrarrestar la pérdida de <code>fnlwgt</code> evaluaremos diferentes instancias del df con las columnas más importantes:</p>
-    <ul>
-        <li> <b>df_no_capital</b>: sin agregar más columnas (total de 7)</li>
-        <li> <b>df_capital_gain</b>: agregando otra feature importance con menos relevancia: <code>capital_gain</code> (total de 8)
-        <li> <b>df_capital_net</b>: haciendo una columna nueva: <code>capital_net</code> <i>(direfencia entre capital_gain y capital_loss)</i> (total de 8)</li>
-    </ul>
-</div>
+* **Reflexión**: Ignorar señales iniciales del EDA nos llevó a invertir tiempo en un reto poco práctico.
+    * A veces, es mejor replantear estrategias en lugar de insistir en soluciones poco factibles.
 
-finalmente entrenamos un RandomForest classifier con un gridsearch para encontrar los mejores parámetros, aunque se descartó por tener un bajo desempeño, el modelo que ha funcionado es un stacking de random forest classifier + xgboost classifier (cada uno con un grid search) administrando el proceso por un pipeline
+* **Nueva estrategia**: Se descartó fnlwgt y se probó con diferentes configuraciones de variables:
+    * *df_no_capital*: Sin columnas adicionales (7 variables)
+    * *df_capital_gain*: Incluyendo capital_gain (8 variables).
+    * *df_capital_net*: Con la derivada capital_net (8 variables)
 
-después de encontrar el mejor modelo, exportamos el código necesario para desplegar el modelo a streamlit. 
-* durante el despliegue nos encontramos con que el modelo en cuestión era demasiado pesado, gracias a Git LFS. aunuqe otra alternativa hubiera sido comprimir el modelo.
+### 🤖 Entrenamiento del Modelo
 
+* **Primera iteración**: Entrenamos un `RandomForestClassifier` +  `GridSearchCV`, pero tuvo un desempeño inferior.
+* **Modelo final**: Implementamos un `StackingClassifier` combinando $\rightarrow$ 
+    * `RandomForestClassifier` +  `XGBoostClassifier` (cada uno optimizado con gridsearch)
+    * Administramos el pipeline completo para garantizar escalabilidad y reproducibilidad
 
+### 🌐 Despliegue del Modelo
 
+* **Exportación del modelo**: Tras seleccionar el mejor modelo, lo exportamos para su despliegue en Streamlit.
+* **Desafíos durante el despliegue**: El modelo excedía el límite de GitHub. Para arreglarlo usamos `Git LFS` para manejar archivos pesados.
+    * otra alternativa hubiera sido comprimir el modelo.
+
+* **Resultado final**: El modelo está desplegado en Streamlit. Los usuarios pueden predecir ingresos anuales en función de los parámetros introducidos
