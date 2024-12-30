@@ -132,7 +132,7 @@ Durante el EDA, la columna `fnlwgt` destacó como una variable significativa par
 * **Nueva estrategia**: Se descartó `fnlwgt` y se probó con diferentes configuraciones de variables:
     * *df_no_capital*: Sin columnas adicionales (7 variables)
     * *df_capital_gain*: Incluyendo capital_gain (8 variables).
-    * *df_capital_net*: Con la derivada capital_net (8 variables)
+    * *df_capital_net*: nueva columna derivada de la diferencia entre `capital_gain` - `capital_loss` (8 variables)
 
 ### 🤖 Entrenamiento del Modelo
 
