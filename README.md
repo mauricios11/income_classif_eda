@@ -118,16 +118,16 @@ Iniciamos estudiando el comportamiento general de las variables. No se encontrar
     * En adición, evaluamos el uso de `PCA` para reducir dimensionalidad, pero los resultados fueron inferiores, ya que la mayoría de las variables eran categóricas.
 
 ### ❌ Dificultades con fnlwgt
-Durante el EDA, fnlwgt destacó como una variable importante. Sin embargo, detectamos que en un contexto práctico, los usuarios no tendrían acceso a este valor.
+Durante el EDA, la columna `fnlwgt` destacó como una variable significativa para la predicción. Sin embargo, detectamos que en un contexto práctico, a la hora de desplgegar el modelo el usuario no tendría acceso a este valor.
 
-* **Estrategia fallida**: Intentamos predecir fnlwgt usando modelos como: *Random Forest, XGBoost, LightGBM, SVR* y un *ensemble stacking*.
-    * A pesar de optimizar hiperparámetros y agregar variables derivadas (como `capital_net`), los resultados fueron insatisfactorios:
-    * Métricas como R², MAE y RMSE reflejaron un modelo incapaz de generalizar.
+* **Estrategia fallida**: Aceptamos el desafío de predecir `fnlwgt` usando modelos como: *Random Forest, XGBoost, LightGBM, SVR* y un *ensemble stacking*.
+    * A pesar de optimizar hiperparámetros y agregar variables derivadas (como `capital_net`), los resultados fueron insatisfactorios
+    * Métricas tales como R², MAE y RMSE reflejaron que el modelo era incapaz de generalizar.
 
-* **Reflexión**: Ignorar señales iniciales del EDA nos llevó a invertir tiempo en un reto poco práctico.
+* **Reflexión**: Ignorar señales iniciales del EDA *(y estar de necios)* nos llevó a invertir tiempo en un reto poco práctico.
     * A veces, es mejor replantear estrategias en lugar de insistir en soluciones poco factibles.
 
-* **Nueva estrategia**: Se descartó fnlwgt y se probó con diferentes configuraciones de variables:
+* **Nueva estrategia**: Se descartó `fnlwgt` y se probó con diferentes configuraciones de variables:
     * *df_no_capital*: Sin columnas adicionales (7 variables)
     * *df_capital_gain*: Incluyendo capital_gain (8 variables).
     * *df_capital_net*: Con la derivada capital_net (8 variables)
