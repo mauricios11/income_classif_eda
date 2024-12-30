@@ -39,6 +39,7 @@ Trabajamos con dos entornos distintos debido a problemas de compatibilidad entre
 git clone https://github.com/mauricios11/income_classif_eda.git
 ```
 ✂️ **entorno 1: (eda)**:
+
 anaconda
 ```
 conda env create -f eda_environment.yml
@@ -50,7 +51,8 @@ python -m venv eda
 source eda/bin/activate  # Windows: eda\Scripts\activate
 pip install -r eda_requirements.txt
 ```
-✂️ **entorno 2: (imbalanced)** 
+✂️ **entorno 2: (imbalanced)**
+
 anaconda *(instalar imblearn con pip)*
 ```
 conda env create -f imbalanced_environment.yml
