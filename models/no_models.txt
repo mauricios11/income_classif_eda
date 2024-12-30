@@ -1,0 +1,5 @@
+# dado que la mayoría de los modelos exceden los 100MB, y GH no permite subir más que esta cantidad a menos que usemos Git LFS. 
+# He decidido sacar todos los modelos :(
+# Sin embargo el modelo final está disponible en el repo: "https://github.com/mauricios11/random_forest_deployment"
+# El despliegue de tal modelo está en: "https://mauricios11-random-forest-deployment.streamlit.app/"
+    

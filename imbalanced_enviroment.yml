@@ -1,0 +1,15 @@
+name: imbalanced_data
+channels:
+  - defaults
+dependencies:
+  - python==3.10.9
+  - jupyter
+  - missingno
+  - pandas==2.2.1
+  - conda-forge::pyjanitor
+  - scikit-learn==1.2.2
+  - conda-forge::pyreadr
+  - conda-forge::statsmodels
+  - conda-forge::py-xgboost
+  #- conda-forge::shap
+prefix: /Users/holamauricios/anaconda3/envs/imbalanced_data

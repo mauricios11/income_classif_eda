@@ -1,0 +1,19 @@
+name: eda
+channels:
+  - defaults
+dependencies:
+  - python=3.10
+  - pandas
+  - conda-forge::pyjanitor
+  - jupyter
+  - conda-forge::statsmodels
+  - scikit-learn==1.5.2
+  - conda-forge::session-info
+  - seaborn
+  - conda-forge::missingno
+  - conda-forge::pyreadr
+  - conda-forge::more-itertools
+  - conda-forge::category_encoders
+  - conda-forge::py-xgboost
+  - conda-forge::scipy
+prefix: /Users/holamauricios/anaconda3/envs/eda
