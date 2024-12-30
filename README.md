@@ -36,8 +36,7 @@ Durante el análisis exploratorio hemos trabajado con dos entornos distintos. La
 ### ℹ️ instalación del proyecto:
 ✂️ En un nuevo directorio para el proyecto, ejecuta el siguiente comando:
 ```
-
-
+git clone https://github.com/mauricios11/income_classif_eda.git
 ```
 ✂️ entorno 1: (eda):
 ```
