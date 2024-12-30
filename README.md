@@ -2,21 +2,19 @@
 
 ## 📝 Descripción
 Este proyecto se centra en la predicción de ingresos anuales usando un dataset del *Census Bureau* de los EEUU. Contiene información demográfica y económica de más de $45,000$ sujetos. El objetivo principal es predecir si una persona tiene un ingreso mayor a $USD $50$ k al año basado en sus características personales y laborales.
+* **objetivos**: A parte de entrenar un `RandomForest` como modelo final para realizar predicciones, el principal objetivo del proyecto es evitar tomar decisiones arbitrarias. A lo largo del análisis, nos enfocamos en justificar cada elección mediante evaluaciones estadísticas
 * *(bitácora al final del README)*
 
-* **objetivos**: A parte de entrenar un `RandomForest` como modelo final para realizar predicciones, el principal objetivo del proyecto es evitar tomar decisiones arbitrarias. A lo largo del análisis, nos enfocamos en justificar cada elección mediante evaluaciones estadísticas
-
-incluye las siguientes variables:
-(*"$n$ tipos distintos"* $\rightarrow$ equivale al número de elementos/categorías diferentes que hay en cada columna **categórica**): 
+### Descripción de variables
 * **(1) age**: edad del sujeto
-* **(2) workclass**: Tipo de trabajo / sector al que pertenece el individuo *(gobierno, privado, sin empleo, etc.)*. $9$ tipos distintos
+* **(2) workclass**: Tipo de trabajo / sector al que pertenece el individuo *(gobierno, privado, sin empleo, etc.)*.
 * **(3) fnlwgt**: Peso final del individup en la encuesta (descripción de esta variable más abajo) 
 * **(4) education_num**: Nivel educativo del individuo *(formato numérico)* correspondiente a los años de educación completados
 * **(5) marital_status**: Estado civil del individuo *(soltero, casado, etc.)*
-* **(6) occupation**: A qué se dedica *(ejecutivo, obrero, empleado de gobierno, etc)*. $15$ tipos distintos
-* **(7) relationship**: Rol **familiar** que el individuo asume dentro del hogar *(jefe de hogar, esposo/a)*. $6$ tipos distintos
-* **(8) ethnicity**: Etnia del individuo *(Blanco, negro, asiático)*. $5$ tipos distintos
-* **(9) genre**: género del individuo. $2$ tipos distintos
+* **(6) occupation**: A qué se dedica *(ejecutivo, obrero, empleado de gobierno, etc)*.
+* **(7) relationship**: Rol **familiar** que el individuo asume dentro del hogar *(jefe de hogar, esposo/a)*.
+* **(8) ethnicity**: Etnia del individuo *(Blanco, negro, asiático)*.
+* **(9) genre**: género del individuo
 * **(10) capital_gain**: Ganancias de vapital adicionales, fuera del salario o ingresos laborales
 * **(11) capital_loss**: Pérdidas de capital adicionales
 * **(12) hours_per_week**: Horas trabajadas por semana
