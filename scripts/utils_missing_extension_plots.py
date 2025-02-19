@@ -9,12 +9,13 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
 import upsetplot
-from statsmodels.graphics.mosaicplot import mosaic
-from typing import List, Tuple
+
+from   statsmodels.graphics.mosaicplot import mosaic
+from   typing import List, Tuple
 import warnings
 
 # own functions
-from utils_missing_extension import MissingMethods
+from scripts.utils_missing_extension import MissingMethods
 
 @pd.api.extensions.register_dataframe_accessor('missing_plot')
 #esta clase hereda de Missing Methods
