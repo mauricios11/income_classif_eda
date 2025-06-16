@@ -67,8 +67,6 @@ pip install -r imbalanced_requirements.txt
 ```
 Si tienen algún problema con la instalación de librerías $\rightarrow$ just hit me up :D *(recomiendo usar anaconda)*
 
-esta es una nueva línea
-
 ### 📝 Estructura del proyecto
 ```
 ├── data
